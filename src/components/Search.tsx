@@ -37,6 +37,17 @@ export default function Search() {
     },
   ]);
   const name = pkg && pkg.name ? `${pkg.name}@${pkg.version}` : pkgname;
+  const handleSearch = () => {
+    if (value) {
+      dispatch.global.update({ showSearch: false });
+      navigate(`/pkg/${value}`);
+    }
+  }
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  }
   return (
     <Fragment>
       <Input
@@ -44,17 +55,14 @@ export default function Search() {
         size="large"
         defaultValue={name}
         preIcon="search"
+        onKeyUp={handleKeyUp}
         onChange={(e) => {
           setValue(e.target.value);
         }}
         addonAfter={
           <Button
-            onClick={() => {
-              if (value) {
-                dispatch.global.update({ showSearch: false });
-                navigate(`/pkg/${value}`);
-              }
-            }}
+            onClick={handleSearch}
+
             icon="arrow-right"
             size="small"
             basic
